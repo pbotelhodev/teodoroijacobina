@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   MapPin,
   MessageCircle,
@@ -16,6 +16,8 @@ import {
   Tv,
   Wifi,
   Sofa,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 import LogoSmarttex from "../src/assets/logo.png";
@@ -71,6 +73,40 @@ export default function App() {
     },
   ];
 
+  const [tipoGaleria, setTipoGaleria] = useState("mobiliado");
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Imagens de exemplo aplicadas para visualização real do layout
+  const imagensGaleria = {
+    vazio: [
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80",
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
+      "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800&q=80",
+    ],
+    mobiliado: [
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80",
+      "https://images.unsplash.com/photo-1502672260266-1c1e6651de95?w=800&q=80",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
+    ],
+  };
+
+  // Reseta o carrossel para a foto 1 sempre que trocar de opção (Vazio/Mobiliado)
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [tipoGaleria]);
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) =>
+      prev === imagensGaleria[tipoGaleria].length - 1 ? 0 : prev + 1,
+    );
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? imagensGaleria[tipoGaleria].length - 1 : prev - 1,
+    );
+  };
+
   return (
     <div className="min-h-screen bg-[#F2EFE9] font-sans text-[#2A2622] scroll-smooth selection:bg-[#BFA473]/20">
       {/* HEADER */}
@@ -89,7 +125,7 @@ export default function App() {
             Diferenciais
           </a>
           <a href="#opcoes" className="hover:text-[#2A2622] transition-colors">
-            Opções
+            Opções & Galeria
           </a>
           <a
             href="#localizacao"
@@ -187,102 +223,194 @@ export default function App() {
         </div>
       </section>
 
-      {/* OPÇÕES DE LOCAÇÃO */}
+      {/* OPÇÕES E GALERIA INTEGRADAS */}
       <section
         id="opcoes"
-        className="py-24 bg-white relative z-10 border-y border-[#E3DED6]"
+        className="py-12 md:py-16 bg-[#FAFAFA] relative z-10 border-y border-[#E3DED6]"
       >
         <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="text-[11px] font-bold text-[#BFA473] uppercase tracking-[0.3em] mb-4 block">
-              Planos de Locação
-            </span>
-            <h2 className="text-4xl font-bold text-[#2A2622] tracking-tighter mb-5">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-[#2A2622] tracking-tighter mb-3">
               Escolha a sua configuração.
             </h2>
-            <p className="text-[#6B6359] text-base max-w-xl mx-auto font-light leading-relaxed">
-              Temos opções flexíveis para o seu momento. Traga a sua própria
-              identidade ou mude-se para um ambiente 100% completo.
+            <p className="text-[#6B6359] text-base max-w-lg mx-auto font-light leading-relaxed mb-6">
+              Temos opções flexíveis para o seu momento.
             </p>
+
+            {/* Botões de Troca */}
+            <div className="inline-flex bg-[#EBE7E0] p-1.5 rounded-full border border-[#D9D4CC] shadow-inner">
+              <button
+                onClick={() => setTipoGaleria("vazio")}
+                className={`px-5 py-2.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all duration-300 ${
+                  tipoGaleria === "vazio"
+                    ? "bg-white text-[#2A2622] shadow-sm border border-[#E3DED6]"
+                    : "text-[#6B6359] hover:text-[#2A2622]"
+                }`}
+              >
+                Espaço Livre
+              </button>
+              <button
+                onClick={() => setTipoGaleria("mobiliado")}
+                className={`px-5 py-2.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all duration-300 ${
+                  tipoGaleria === "mobiliado"
+                    ? "bg-[#2A2622] text-[#BFA473] shadow-md border border-[#3E3934]"
+                    : "text-[#6B6359] hover:text-[#2A2622]"
+                }`}
+              >
+                Mobiliado
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* CARD 1: Sem Mobília */}
-            <div className="bg-[#F2EFE9] p-10 rounded-2xl border border-[#E3DED6] flex flex-col">
-              <h3 className="text-3xl font-bold text-[#2A2622] mb-3">
-                Espaço Livre
-              </h3>
-              <p className="text-sm text-[#6B6359] mb-8 font-light leading-relaxed">
-                Unidade padrão sem mobília. Ideal para quem já possui móveis e
-                deseja personalizar cada detalhe do ambiente.
-              </p>
-              <ul className="space-y-4 mb-10 flex-1">
-                <li className="flex items-center gap-3 text-base text-[#2A2622]">
-                  <Check size={20} className="text-[#9C948A]" /> Infraestrutura
-                  elétrica e hidráulica
-                </li>
-                <li className="flex items-center gap-3 text-base text-[#2A2622]">
-                  <Check size={20} className="text-[#9C948A]" /> Ambientes
-                  integrados e bem distribuídos
-                </li>
-                <li className="flex items-center gap-3 text-base text-[#2A2622]">
-                  <Check size={20} className="text-[#9C948A]" /> Bancada de
-                  cozinha instalada
-                </li>
-                <li className="flex items-center gap-3 text-base text-[#2A2622]">
-                  <Check size={20} className="text-[#9C948A]" /> Imóvel
-                  recém-revisado e com pintura nova
-                </li>
-              </ul>
-              <a
-                href={waLink}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full text-center border border-[#2A2622] text-[#2A2622] py-4 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-[#2A2622] hover:text-white transition-all"
-              >
-                Consultar Valor
-              </a>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
+            {/* LADO ESQUERDO: CARD DE INFORMAÇÕES */}
+            <div className="flex w-full">
+              {tipoGaleria === "vazio" ? (
+                <div className="bg-white p-5 lg:p-8 rounded-2xl border border-[#E3DED6] flex flex-col w-full shadow-sm hover:shadow-md transition-shadow duration-300">
+                  <h3 className="text-xl font-bold text-[#2A2622] mb-1">
+                    Espaço Livre
+                  </h3>
+                  <p className="text-sm text-[#6B6359] mb-6 font-light leading-relaxed">
+                    Unidade padrão sem mobília. Ideal para personalizar cada
+                    detalhe do ambiente.
+                  </p>
+                  <ul className="space-y-3 mb-6">
+                    <li className="flex items-center gap-3 text-sm text-[#4A443D]">
+                      <span className="shrink-0 w-6 h-6 rounded-full bg-[#F2EFE9] flex items-center justify-center">
+                        <Check size={14} className="text-[#9C948A]" />
+                      </span>
+                      Infraestrutura elétrica e hidráulica
+                    </li>
+                    <li className="flex items-center gap-3 text-sm text-[#4A443D]">
+                      <span className="shrink-0 w-6 h-6 rounded-full bg-[#F2EFE9] flex items-center justify-center">
+                        <Check size={14} className="text-[#9C948A]" />
+                      </span>
+                      Ambientes integrados e bem distribuídos
+                    </li>
+                    <li className="flex items-center gap-3 text-sm text-[#4A443D]">
+                      <span className="shrink-0 w-6 h-6 rounded-full bg-[#F2EFE9] flex items-center justify-center">
+                        <Check size={14} className="text-[#9C948A]" />
+                      </span>
+                      Bancada de cozinha instalada
+                    </li>
+                    <li className="flex items-center gap-3 text-sm text-[#4A443D]">
+                      <span className="shrink-0 w-6 h-6 rounded-full bg-[#F2EFE9] flex items-center justify-center">
+                        <Check size={14} className="text-[#9C948A]" />
+                      </span>
+                      Imóvel recém-revisado e pintura nova
+                    </li>
+                  </ul>
+                  <a
+                    href={waLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full text-center border-2 border-[#2A2622] text-[#2A2622] py-3 rounded-xl text-[11px] font-bold uppercase tracking-widest hover:bg-[#2A2622] hover:text-white transition-colors duration-300 mt-auto"
+                  >
+                    Consultar Valor
+                  </a>
+                </div>
+              ) : (
+                <div className="bg-[#2A2622] p-5 lg:p-8 rounded-2xl border border-[#3E3934] flex flex-col relative overflow-hidden shadow-xl w-full transform transition-all duration-300">
+                  <div className="absolute top-[-20%] right-[-10%] w-48 h-48 bg-[#BFA473]/20 rounded-full blur-[60px] pointer-events-none"></div>
+
+                  <div className="inline-flex items-center gap-1.5 bg-[#BFA473]/20 text-[#BFA473] px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest w-fit mb-3">
+                    <Zap size={12} /> O Mais Escolhido
+                  </div>
+
+                  <h3 className="text-xl font-bold text-white mb-1">
+                    Pronto para Morar
+                  </h3>
+                  <p className="text-sm text-[#E3DED6] mb-6 font-light leading-relaxed">
+                    A experiência completa de conforto e praticidade. Basta
+                    trazer as suas malas.
+                  </p>
+                  <ul className="space-y-3 mb-6 relative z-10">
+                    <li className="flex items-center gap-3 text-sm text-[#F2EFE9]">
+                      <span className="shrink-0 w-6 h-6 rounded-full bg-[#3E3934] flex items-center justify-center">
+                        <Wind size={14} className="text-[#BFA473]" />
+                      </span>
+                      Ar-condicionado instalado
+                    </li>
+                    <li className="flex items-center gap-3 text-sm text-[#F2EFE9]">
+                      <span className="shrink-0 w-6 h-6 rounded-full bg-[#3E3934] flex items-center justify-center">
+                        <Tv size={14} className="text-[#BFA473]" />
+                      </span>
+                      TV a Cabo
+                    </li>
+                    <li className="flex items-center gap-3 text-sm text-[#F2EFE9]">
+                      <span className="shrink-0 w-6 h-6 rounded-full bg-[#3E3934] flex items-center justify-center">
+                        <Sofa size={14} className="text-[#BFA473]" />
+                      </span>
+                      Mobília completa
+                    </li>
+                  </ul>
+                  <a
+                    href={waLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full text-center bg-[#BFA473] text-[#1A1815] py-3 rounded-xl text-[11px] font-bold uppercase tracking-widest hover:bg-white transition-colors duration-300 relative z-10 mt-auto"
+                  >
+                    Garantir Unidade
+                  </a>
+                </div>
+              )}
             </div>
 
-            {/* CARD 2: Mobiliado (Destaque Premium) */}
-            <div className="bg-[#2A2622] p-10 rounded-2xl border border-[#3E3934] flex flex-col relative overflow-hidden shadow-2xl transform md:-translate-y-4">
-              <div className="absolute top-0 right-0 w-40 h-40 bg-[#BFA473]/10 rounded-full blur-3xl pointer-events-none"></div>
-
-              <div className="inline-flex items-center gap-2 bg-[#BFA473]/20 text-[#BFA473] px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest w-fit mb-6">
-                <Zap size={12} /> O Mais Escolhido
+            {/* LADO DIREITO: CARROSSEL DE IMAGENS CONTROLADO */}
+            <div className="flex w-full h-75 lg:h-95 relative group rounded-2xl overflow-hidden border border-[#E3DED6] shadow-sm">
+              {/* Trilho das imagens */}
+              <div
+                className="flex w-full h-full transition-transform duration-500 ease-in-out"
+                style={{
+                  transform: `translateX(-${currentImageIndex * 100}%)`,
+                }}
+              >
+                {imagensGaleria[tipoGaleria].map((img, idx) => (
+                  <div
+                    key={idx}
+                    className="min-w-full h-full relative shrink-0 bg-[#EBE7E0]"
+                  >
+                    <img
+                      src={img}
+                      alt={`Ambiente ${tipoGaleria} ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+                ))}
               </div>
 
-              <h3 className="text-3xl font-bold text-white mb-3">
-                Pronto para Morar
-              </h3>
-              <p className="text-sm text-[#E3DED6] mb-8 font-light leading-relaxed">
-                A experiência completa de conforto e praticidade. Instalação
-                imediata, basta trazer as suas malas.
-              </p>
-              <ul className="space-y-4 mb-10 flex-1 relative z-10">
-                <li className="flex items-center gap-3 text-base text-[#E3DED6]">
-                  <Wind size={20} className="text-[#BFA473]" /> Ar-condicionado
-                  instalado
-                </li>
-                <li className="flex items-center gap-3 text-base text-[#E3DED6]">
-                  <Tv size={20} className="text-[#BFA473]" /> TV a Cabo
-                </li>
-                <li className="flex items-center gap-3 text-base text-[#E3DED6]">
-                  <Wifi size={20} className="text-[#BFA473]" /> Wi-Fi de alta
-                  velocidade
-                </li>
-                <li className="flex items-center gap-3 text-base text-[#E3DED6]">
-                  <Sofa size={20} className="text-[#BFA473]" /> Mobília completa
-                </li>
-              </ul>
-              <a
-                href={waLink}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full text-center bg-[#BFA473] text-[#2A2622] py-4 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-white transition-all relative z-10 shadow-lg"
+              {/* Botões do Carrossel */}
+              <button
+                onClick={prevImage}
+                className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-[#2A2622] p-2 rounded-full shadow-md backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
+                aria-label="Imagem anterior"
               >
-                Garantir Unidade
-              </a>
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                onClick={nextImage}
+                className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-[#2A2622] p-2 rounded-full shadow-md backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
+                aria-label="Próxima imagem"
+              >
+                <ChevronRight size={20} />
+              </button>
+
+              {/* Indicadores (Dots) */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                {imagensGaleria[tipoGaleria].map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentImageIndex(idx)}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      currentImageIndex === idx
+                        ? "bg-[#BFA473] w-6"
+                        : "bg-white/60 w-1.5 hover:bg-white"
+                    }`}
+                    aria-label={`Ir para a foto ${idx + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -295,7 +423,7 @@ export default function App() {
             <h2 className="text-3xl font-bold text-[#2A2622] tracking-tighter mb-4">
               Tudo ao seu redor.
             </h2>
-            <p className="text-[#6B6359] text-base">
+            <p className="text-[#6B6359] text-base max-w-lg mx-auto">
               R. Gen. Rabêlo, 229 - Duque de Caxias, Cuiabá - MT
             </p>
           </div>
@@ -315,10 +443,10 @@ export default function App() {
               </div>
             ))}
           </div>
-          <div className="w-full aspect-[16/6] md:aspect-[21/7] rounded-xl overflow-hidden shadow-md border border-[#E3DED6] bg-[#EBE7E0]">
+          <div className="w-full aspect-16/6 md:aspect-21/7 rounded-xl overflow-hidden shadow-md border border-[#E3DED6] bg-[#EBE7E0]">
             <iframe
               title="Mapa de Localização"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3842.9238634843794!2d-56.1086884!3d-15.5957018!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x939db195e29783f9%3A0x8673322f18379c6b!2sR.%20Gen.%20Rab%C3%AAlo%2C%20229%20-%20Duque%20de%20Caxias%2C%20Cuiab%C3%A1%20-%20MT%2C%2078043-348!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3843.910385906806!2d-56.11189442488813!3d-15.595995285025736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x939db1b90d238381%3A0xc60c7333ed8ce0ea!2sR.%20Gen.%20Rab%C3%AAlo%2C%20229%20-%20Duque%20de%20Caxias%2C%20Cuiab%C3%A1%20-%20MT%2C%2078043-328!5e0!3m2!1spt-BR!2sbr!4v1715801234567!5m2!1spt-BR!2sbr"
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -333,7 +461,7 @@ export default function App() {
 
       {/* CTA FINAL */}
       <section className="py-32 bg-[#2A2622] relative overflow-hidden flex items-center justify-center border-t border-[#3E3934]">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[400px] bg-[#BFA473]/10 rounded-full blur-[90px] pointer-events-none"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-100 bg-[#BFA473]/10 rounded-full blur-[90px] pointer-events-none"></div>
         <div className="max-w-2xl mx-auto px-6 text-center relative z-10 flex flex-col items-center">
           <div className="w-16 h-16 bg-[#3E3934]/50 backdrop-blur-md rounded-xl border border-[#BFA473]/20 flex items-center justify-center mb-6 shadow-xl">
             <MessageCircle

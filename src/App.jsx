@@ -19,10 +19,11 @@ import {
 } from "lucide-react";
 
 import LogoSmarttex from "../src/assets/logo.png";
+import HeroImage from "./assets/hero3.jpg";
 
 export default function App() {
   const waLink =
-    "https://wa.me/5565999999999?text=Olá%2C%20tenho%20interesse%20em%20alugar%20um%20flat%20no%20Duque%20de%20Caxias!";
+    "https://wa.me/5565992662309?text=Olá%2C%20tenho%20interesse%20em%20alugar%20um%20flat%20no%20Duque%20de%20Caxias!";
 
   const features = [
     {
@@ -114,8 +115,8 @@ export default function App() {
       >
         <div className="absolute inset-0 z-0">
           <img
-            src="https://www.gettyimages.com/detail/1281649424"
-            alt="Interior"
+            src={HeroImage}
+            alt="Hero Image"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-linear-to-r from-[#2A2622]/80 via-[#2A2622]/30 to-transparent"></div>

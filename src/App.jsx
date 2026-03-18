@@ -122,12 +122,12 @@ export default function App() {
           <div className="absolute inset-0 bg-linear-to-r from-[#2A2622]/80 via-[#2A2622]/30 to-transparent"></div>
         </div>
         <div className="max-w-5xl w-full mx-auto px-6 relative z-10">
-          <div className="bg-[#2A2622] p-8 rounded-xl shadow-2xl max-w-xl border border-[#3E3934]">
+          <div className="bg-[#2A2622] p-8 rounded-xl shadow-2xl max-w-lg border border-[#3E3934]">
             <span className="inline-flex items-center gap-2 text-[#BFA473] text-[11px] uppercase tracking-[0.2em] mb-4 font-bold">
               <span className="w-2 h-2 rounded-full bg-[#BFA473] animate-pulse"></span>
               R. Gen. Rabêlo, 229 - Duque de Caxias
             </span>
-            <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight mb-5 tracking-tighter">
+            <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight mb-5 tracking-tighter">
               Seu flat pronto <br /> no Duque de Caxias
             </h1>
             <p className="text-[#E3DED6] text-base mb-8 leading-relaxed font-light">
